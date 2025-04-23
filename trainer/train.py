@@ -2,7 +2,8 @@ import time
 import copy
 import torch
 
-def train_model(model, dataloaders, dataset_sizes, device, criterion, optimizer, scheduler, num_epochs, result_path):
+
+def train_model(model, dataloaders, dataset_sizes, device, criterion, optimizer, scheduler, num_epochs, result_path, logger):
     since = time.time()
     best_model_wts = copy.deepcopy(model.state_dict())
     best_acc = 0.0
@@ -17,7 +18,8 @@ def train_model(model, dataloaders, dataset_sizes, device, criterion, optimizer,
     for epoch in range(num_epochs):
         print(f'Epoch {epoch}/{num_epochs-1}')
         print('-' * 10)
-
+        logger.info(f'Epoch {epoch}/{num_epochs-1}')
+        
         for phase in ['train', 'val']:
             if phase == 'train':
                 model.train()
@@ -59,6 +61,7 @@ def train_model(model, dataloaders, dataset_sizes, device, criterion, optimizer,
                 history['val_acc'].append(epoch_acc.item())
 
             print(f'{phase} Loss: {epoch_loss:.4f} Acc: {epoch_acc:.4f}')
+            logger.info(f'{phase} Loss: {epoch_loss:.4f} Acc: {epoch_acc:.4f}')
 
             # 保存最佳模型
             if phase == 'val' and epoch_acc > best_acc:
@@ -71,6 +74,8 @@ def train_model(model, dataloaders, dataset_sizes, device, criterion, optimizer,
     time_elapsed = time.time() - since
     print(f'Training complete in {time_elapsed//60:.0f}m {time_elapsed%60:.0f}s')
     print(f'Best val Acc: {best_acc:4f}')
-
+    logger.info(f'Training complete in {time_elapsed//60:.0f}m {time_elapsed%60:.0f}s')
+    logger.info(f'Best val Acc: {best_acc:4f}')
+    
     model.load_state_dict(best_model_wts)
     return model, history

@@ -7,6 +7,7 @@ from utils.utils import setup_seed, create_experiment_dir, save_training_plots, 
 import torch
 import torch.optim as optim
 from torch.optim import lr_scheduler
+from utils.logger import setup_logger
 
 def main():
     # 获取配置
@@ -17,6 +18,7 @@ def main():
     
     # 创建实验目录
     result_path = create_experiment_dir(config)
+    logger = setup_logger(result_path, config.model)
     
     # 准备数据
     dataloaders, class_names = get_dataloaders(config.data_dir, config.batch_size)
@@ -48,7 +50,8 @@ def main():
         optimizer=optimizer,
         scheduler=exp_lr_scheduler,
         num_epochs=config.epochs,
-        result_path=result_path
+        result_path=result_path,
+        logger=logger
     )
     # 保存训练曲线
     save_training_plots(history, result_path)
