@@ -8,3 +8,4 @@ t1.py
 test.py
 .vscode/
 results/
+*/__pycache__/
