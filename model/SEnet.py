@@ -155,20 +155,20 @@ class SEResNet(nn.Module):
 
         return nn.Sequential(*layers)
 
-def seresnet18():
-    return SEResNet(BasicResidualSEBlock, [2, 2, 2, 2])
+def seresnet18(num_classes=100):
+    return SEResNet(BasicResidualSEBlock, [2, 2, 2, 2], class_num=num_classes)
 
-def seresnet34():
-    return SEResNet(BasicResidualSEBlock, [3, 4, 6, 3])
+def seresnet34(num_classes=100):
+    return SEResNet(BasicResidualSEBlock, [3, 4, 6, 3], class_num=num_classes)
 
-def seresnet50():
-    return SEResNet(BottleneckResidualSEBlock, [3, 4, 6, 3])
+def seresnet50(num_classes=100):
+    return SEResNet(BottleneckResidualSEBlock, [3, 4, 6, 3], class_num=num_classes)
 
-def seresnet101():
-    return SEResNet(BottleneckResidualSEBlock, [3, 4, 23, 3])
+def seresnet101(num_classes=100):
+    return SEResNet(BottleneckResidualSEBlock, [3, 4, 23, 3], class_num=num_classes)
 
-def seresnet152():
-    return SEResNet(BottleneckResidualSEBlock, [3, 8, 36, 3])
+def seresnet152(num_classes=100):
+    return SEResNet(BottleneckResidualSEBlock, [3, 8, 36, 3], class_num=num_classes)
 
 if __name__ == "__main__":
 

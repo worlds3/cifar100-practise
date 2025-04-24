@@ -29,6 +29,34 @@ class BasicBlock(nn.Module):
     def forward(self, x):
         return nn.ReLU(inplace=True)(self.residual_function(x) + self.shortcut(x))
 
+class BottleNeck(nn.Module):
+    """Residual block for resnet over 50 layers
+
+    """
+    expansion = 4
+    def __init__(self, in_channels, out_channels, stride=1):
+        super().__init__()
+        self.residual_function = nn.Sequential(
+            nn.Conv2d(in_channels, out_channels, kernel_size=1, bias=False),
+            nn.BatchNorm2d(out_channels),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(out_channels, out_channels, stride=stride, kernel_size=3, padding=1, bias=False),
+            nn.BatchNorm2d(out_channels),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(out_channels, out_channels * BottleNeck.expansion, kernel_size=1, bias=False),
+            nn.BatchNorm2d(out_channels * BottleNeck.expansion),
+        )
+
+        self.shortcut = nn.Sequential()
+
+        if stride != 1 or in_channels != out_channels * BottleNeck.expansion:
+            self.shortcut = nn.Sequential(
+                nn.Conv2d(in_channels, out_channels * BottleNeck.expansion, stride=stride, kernel_size=1, bias=False),
+                nn.BatchNorm2d(out_channels * BottleNeck.expansion)
+            )
+
+    def forward(self, x):
+        return nn.ReLU(inplace=True)(self.residual_function(x) + self.shortcut(x))
 
 # 定义通用的ResNet结构
 class ResNet(nn.Module):
@@ -72,6 +100,26 @@ class ResNet(nn.Module):
 # 定义ResNet18
 def resnet18(num_classes=100):
     return ResNet(BasicBlock, [2, 2, 2, 2], num_classes=num_classes)
+
+def resnet34(num_classes=100):
+    """ return a ResNet 34 object
+    """
+    return ResNet(BasicBlock, [3, 4, 6, 3], num_classes=num_classes)
+
+def resnet50(num_classes=100):
+    """ return a ResNet 50 object
+    """
+    return ResNet(BottleNeck, [3, 4, 6, 3], num_classes=num_classes)
+
+def resnet101(num_classes=100):
+    """ return a ResNet 101 object
+    """
+    return ResNet(BottleNeck, [3, 4, 23, 3], num_classes=num_classes)
+
+def resnet152(num_classes=100):
+    """ return a ResNet 152 object
+    """
+    return ResNet(BottleNeck, [3, 8, 36, 3], num_classes=num_classes)
 
 if __name__ == '__main__':
     # 结构可视化
