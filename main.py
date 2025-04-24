@@ -1,7 +1,7 @@
 import os
 from config import get_config
 from dataload.dataload import get_dataloaders
-import model.resnet as module_arch
+import model.attention as module_arch
 from trainer.train import train_model
 from utils.utils import setup_seed, create_experiment_dir, save_training_plots, save_config
 import torch

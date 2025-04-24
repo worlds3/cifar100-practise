@@ -1,7 +1,5 @@
 cifar/
 1.py
-实验记录.md
-attention.py
 Practice_11_Squeeze-and-Excitation.py
 practise_10_cifar100.py
 t1.py
@@ -10,3 +8,4 @@ test.py
 results/
 **/__pycache__/
 */__pycache__/
+.ipynb_checkpoints/
